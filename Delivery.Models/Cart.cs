@@ -21,5 +21,7 @@ namespace DeliveryAll.Models
         public ApplicationUser ApplicationUser { get; set; }
         [Range(1,100,ErrorMessage = "Pleace enter a value between 1 and 100")]
         public int Count { get; set; }
+        [NotMapped]
+        public double Price {  get; set; }
     }
 }

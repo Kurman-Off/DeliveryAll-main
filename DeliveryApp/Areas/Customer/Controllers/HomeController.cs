@@ -33,8 +33,7 @@ namespace DeliveryAll.Areas.Customer.Controllers
                 Count = 1,
                 FoodItemId = foodItemId
             };
-
-            return RedirectToAction(nameof(Index));
+            return View(cart);   
         }
         [HttpPost]
         [Authorize]
@@ -57,9 +56,8 @@ namespace DeliveryAll.Areas.Customer.Controllers
                 _unitOfWork.Cart.Add(cart);
             }
 
-            _unitOfWork.Cart.Add(cart);
             _unitOfWork.Save();
-            return View();
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Privacy()
         {

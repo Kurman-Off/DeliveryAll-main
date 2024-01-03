@@ -1,6 +1,8 @@
 ﻿using DeliveryAll.DataAccess.Data;
 using DeliveryAll.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace DeliveryAll.DataAccess.Repository
 {
@@ -31,17 +33,37 @@ namespace DeliveryAll.DataAccess.Repository
 			dbSet.RemoveRange(entity);
 		}
 
-		public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter, string? includeProperties = null)
+		public T Get(Expression<Func<T, bool>> filter, string? includeProperties, bool tracked = false)
 		{
-			IQueryable<T> query = dbSet;
-			query = query.Where(filter);
-			return query.FirstOrDefault();
-		}
+			IQueryable<T> query;
+            if (tracked)
+			{
+                query = dbSet;
+            }
+			else
+			{
+				query = dbSet.AsNoTracking();
+            }
+            query = query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.FirstOrDefault();
+        }
 
-		public IEnumerable<T> GetAll(string? includeProperties = null)
+		public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter, string? includeProperties = null)
 		{
 			IQueryable<T> query = dbSet;
-			if(!string.IsNullOrEmpty(includeProperties))
+			if(filter!=null)
+			{
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
 			{
 				foreach(var includeProp in includeProperties
 					.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
