@@ -4,7 +4,7 @@ using DeliveryAll.DataAccess.Repository.IRepository;
 using DeliveryAll.Models;
 using DeliveryAll.Repository.IRepository;
 
-namespace DeliveryAll.Repository
+namespace DeliveryAll.DataAccess.Repository
 {
 	public class FoodItemrepository : Repository<FoodItem>, IFoodItemRepository
 	{

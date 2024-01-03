@@ -1,12 +1,15 @@
 ﻿using DeliveryAll.Models;
 using DeliveryAll.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace DeliveryAll.Areas.Customer.Controllers
 {
-	[Area("Customer")]
-	public class HomeController : Controller
+    [Area("Customer")]
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,13 +25,43 @@ namespace DeliveryAll.Areas.Customer.Controllers
             IEnumerable<FoodItem> foodItemList = _unitOfWork.FoodItem.GetAll(includeProperties: "category");
             return View(foodItemList);
         }
-		public IActionResult Details(int foodItemId)
-		{
-			FoodItem foodItem = _unitOfWork.FoodItem.Get(u=>u.Id==foodItemId, includeProperties: "category");
-			return View(foodItem);
-		}
+        public IActionResult Details(int foodItemId)
+        {
+            Cart cart = new()
+            {
+                FoodItem = _unitOfWork.FoodItem.Get(u => u.Id == foodItemId, includeProperties: "category"),
+                Count = 1,
+                FoodItemId = foodItemId
+            };
 
-		public IActionResult Privacy()
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(Cart cart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            cart.ApplicationUserId = userId;
+
+            Cart cartFromDb = _unitOfWork.Cart.Get(u => u.ApplicationUserId == userId && 
+             u.FoodItemId == cart.FoodItemId);
+
+            if(cartFromDb != null)
+            {
+                cartFromDb.Count += cart.Count;
+                _unitOfWork.Cart.Update(cartFromDb);
+            }
+            else
+            {
+                _unitOfWork.Cart.Add(cart);
+            }
+
+            _unitOfWork.Cart.Add(cart);
+            _unitOfWork.Save();
+            return View();
+        }
+        public IActionResult Privacy()
         {
             return View();
         }

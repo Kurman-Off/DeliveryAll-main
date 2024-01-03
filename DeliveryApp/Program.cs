@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using DeliveryAll.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using DeliveryAll.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

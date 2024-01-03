@@ -5,10 +5,10 @@ using DeliveryAll.Repository.IRepository;
 
 namespace DeliveryAll.DataAccess.Repository
 {
-	public class CategoryRepository : Repository<Category>, ICategoryRepository
+	public class CartRepository : Repository<Cart>, ICartRepository
 	{
 		private ApplicationDbContext _db;
-		public CategoryRepository(ApplicationDbContext db) : base(db)
+		public CartRepository(ApplicationDbContext db) : base(db)
 		{
 			_db = db;
 		}
@@ -16,9 +16,9 @@ namespace DeliveryAll.DataAccess.Repository
 		{
 			_db.SaveChanges();
 		}
-		public void Update(Category obj)
+		public void Update(Cart obj)
 		{
-			_db.Categories.Update(obj);
+			_db.Carts.Update(obj);
 		}
 	}
 }

@@ -6,6 +6,8 @@ namespace DeliveryAll.Repository.IRepository
 	{
 		ICategoryRepository Category { get; }
 		IFoodItemRepository FoodItem { get; }
-		void Save();
+		ICartRepository Cart { get; }
+        IApplicationUserRepository ApplicationUser { get; }
+        void Save();
 	}
 }

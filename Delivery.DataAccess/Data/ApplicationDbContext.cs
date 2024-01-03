@@ -12,6 +12,7 @@ namespace DeliveryAll.DataAccess.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<FoodItem> FoodItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
