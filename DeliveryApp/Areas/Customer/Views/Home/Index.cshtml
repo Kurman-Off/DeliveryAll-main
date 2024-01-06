@@ -1,0 +1,29 @@
+﻿@model IEnumerable<FoodItem>
+
+<div class="row pb-3">
+	@foreach (var foodItem in Model)
+	{
+		<div class="col-lg-3 col-sm-6">
+			<div class="row p-2">
+				<div class="col-12 p-1">
+					<div class="card border-0 p-3 shadow border-top border-5 rounded">
+						<img src="@foodItem.ImageUrl" class="card-img-top rounded"/>
+						<div class="card-body pb-0">
+							<div class="pl-1">
+								<p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@foodItem.Name</p>
+							</div>
+							<div class="pl-1">
+								<p class="card-title h6 opacity-75 text-dark text-uppercase">Price: @foodItem.Price ₴</p>
+							</div>
+						</div>
+						<div>
+							<a asp-action="Details" asp-route-foodItemId="@foodItem.Id" class="btn btn-dark bg-black border-0 form-control">
+								Details
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>
