@@ -140,6 +140,7 @@ a {
 .row {
     align-items: center;
     justify-content: center;
+    background-color: red;
 }
 
 .food_modal {
